@@ -15,7 +15,6 @@ import (
 const WALLPAPERS_PATH = "home/catalin/Pictures/wallpapers/"
 
 func main() {
-  fmt.Println("hello")
   if os.Args[1] == "change" {
     changeBackground()
   } else if os.Args[1] == "next" {
@@ -23,8 +22,11 @@ func main() {
   } else if os.Args[1] == "prev" {
     prevBackground()
   } else if os.Args[1] == "loop" {
-    prevBackground()
-    newLoop(backgrounds(), currentBackground())
+    newLoop(os.Args)
+  } else if os.Args[1] == "start" {
+    newTmux()
+  } else if os.Args[1] == "stop" {
+    exitTmux()
   }
 }
 
@@ -54,6 +56,7 @@ func prevBackground() {
 func backgrounds() []string {
   commands := []string { "ls", "home/catalin/Pictures/wallpapers/" }
   out := runCommand(commands)
+
   if out != "" {
     return strings.Split(out, "\n")
   }
@@ -62,10 +65,11 @@ func backgrounds() []string {
 } 
 
 func currentBackground() string {
-  commands := []string { "cat", "/home/catalin/.fehbg" }
-  runCommand(commands)
   re := regexp.MustCompile(`'([^"]*)'`)
-  fehContent := strings.Trim(re.FindString(runCommand(commands)), "'")
+  commands := []string { "cat", "/home/catalin/.fehbg" }
+  catCommand:= runCommand(commands)
+
+  fehContent := strings.Trim(re.FindString(catCommand), "'")
   splitFeh := strings.Split(fehContent, "/")
 
   return splitFeh[len(splitFeh) -1]
@@ -88,12 +92,14 @@ func runCommand(commands []string) string {
   var out bytes.Buffer
   cmd.Stdout = &out
 
-  err := cmd.Run()
+  fmt.Println("Commands", commands)
+  cmd.Run()
 
-  if err != nil {
-    fmt.Println(err.Error())
-    return ""
+  returnString := ""
+
+  if out.Len() > 0 {
+    returnString = out.String()
   }
 
-  return out.String()
+  return returnString
 }
