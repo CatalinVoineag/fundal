@@ -13,10 +13,7 @@ type Loop struct {
 
 func newLoop(wallpapers []string, currentWallpaper string) {
   loop := Loop { wallpapers: wallpapers, currentWallpaper: currentWallpaper }
-  //go call(loop)
   call(loop)
-
-  //time.Sleep(1* time.Second)
   fmt.Println("Loop started")
 }
 
@@ -37,13 +34,13 @@ func call(loop Loop) {
     cronJob.Stop()
 }
 
-func start(loop Loop) {
-  randomWallpaperIndex := randomWallpaperIndex(
-    loop.wallpapers,
-    loop.currentWallpaper,
-  )
-
-  feh := []string { "feh", "--bg-scale", loop.wallpapers[randomWallpaperIndex] }
-  executeCommand(feh)
-  fmt.Println("New Background:", loop.wallpapers[randomWallpaperIndex])
-}
+//func start(loop Loop) {
+//  randomWallpaperIndex := randomWallpaperIndex(
+//    loop.wallpapers,
+//    loop.currentWallpaper,
+//  )
+//
+//  feh := []string { "feh", "--bg-scale", loop.wallpapers[randomWallpaperIndex] }
+//  executeCommand(feh)
+//  fmt.Println("New Background:", loop.wallpapers[randomWallpaperIndex])
+//}

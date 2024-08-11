@@ -18,11 +18,34 @@ func main() {
   fmt.Println("hello")
   if os.Args[1] == "change" {
     changeBackground()
+  } else if os.Args[1] == "next" {
+    nextBackground()
+  } else if os.Args[1] == "prev" {
+    prevBackground()
+  } else if os.Args[1] == "loop" {
+    prevBackground()
+    newLoop(backgrounds(), currentBackground())
   }
 }
 
 func changeBackground() {
   wallPaperPath := WALLPAPERS_PATH + backgrounds()[randomBackgroundIndex()]
+  commands := []string {"feh", "--bg-scale", wallPaperPath}
+  runCommand(commands)
+  fmt.Println("New background:", currentBackground())
+}
+
+func nextBackground() {
+  currentIndex := slices.Index(backgrounds(), currentBackground())
+  wallPaperPath := WALLPAPERS_PATH + backgrounds()[currentIndex + 1]
+  commands := []string {"feh", "--bg-scale", wallPaperPath}
+  runCommand(commands)
+  fmt.Println("New background:", currentBackground())
+}
+
+func prevBackground() {
+  currentIndex := slices.Index(backgrounds(), currentBackground())
+  wallPaperPath := WALLPAPERS_PATH + backgrounds()[currentIndex + -1]
   commands := []string {"feh", "--bg-scale", wallPaperPath}
   runCommand(commands)
   fmt.Println("New background:", currentBackground())
