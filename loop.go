@@ -1,49 +1,38 @@
 package main
 
 import (
-  "fmt"
   "time"
-  "github.com/robfig/cron"
+  "fmt"
+  "strconv"
+  "errors"
 )
 
-type Loop struct {
-  wallpapers []string
-  currentWallpaper string
+func newLoop(args []string) {
+  minutes, err := validDurationArgs(args)
+
+  if err != nil {
+    fmt.Println(err.Error())
+    return
+  }
+
+  for true {
+    timer1 := time.NewTimer(time.Duration(minutes) * time.Minute)
+
+    <-timer1.C
+    changeBackground() 
+  }
 }
 
-func newLoop(wallpapers []string, currentWallpaper string) {
-  loop := Loop { wallpapers: wallpapers, currentWallpaper: currentWallpaper }
-  //go call(loop)
-  call(loop)
+func validDurationArgs(args []string) (int, error) {
+  if len(args) < 3 {
+    return 0, errors.New("You need to pass the minutes")
+  }
 
-  //time.Sleep(1* time.Second)
-  fmt.Println("Loop started")
-}
+  minutes, err := strconv.Atoi(args[2])
 
-func call(loop Loop) {
-    cronJob := cron.New()
+  if err != nil {
+    return 0, errors.New("You need to pass the minutes as an int")
+  }
 
-    cronJob.AddFunc("* * * * *", func() {
-        fmt.Println("Hello world!")
-    })
-
-    // Start the Cron job scheduler
-    cronJob.Start()
-
-    // Wait for the Cron job to run
-    time.Sleep(5 * time.Minute)
-
-    // Stop the Cron job scheduler
-    cronJob.Stop()
-}
-
-func start(loop Loop) {
-  randomWallpaperIndex := randomWallpaperIndex(
-    loop.wallpapers,
-    loop.currentWallpaper,
-  )
-
-  feh := []string { "feh", "--bg-scale", loop.wallpapers[randomWallpaperIndex] }
-  executeCommand(feh)
-  fmt.Println("New Background:", loop.wallpapers[randomWallpaperIndex])
+  return minutes, nil
 }
