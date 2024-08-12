@@ -1,15 +1,16 @@
 package main
 
 import (
-//  "fmt"
+  "strconv"
+  "fmt"
 )
 
-func newTmux() {
+func newTmux(args []string) {
   if sessionActive() == true {
     killCurrentSession() 
-    createSession()
+    createSession(args)
   } else {
-    createSession()
+    createSession(args)
   }
 }
 
@@ -39,7 +40,14 @@ func killCurrentSession() {
   runCommand(commands)
 }
 
-func createSession() {
+func createSession(args []string) {
+  minutes, err := validDurationArgs(args)
+
+  if err != nil {
+    fmt.Println(err.Error())
+    return
+  }
+
   commands := []string {
     "tmux",
     "new-session",
@@ -47,6 +55,7 @@ func createSession() {
     "-s",
     "'fundal process'",
     "/home/catalin/play/fundal/bin/main loop",
+    strconv.Itoa(minutes),
   }
 
   runCommand(commands)

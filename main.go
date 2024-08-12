@@ -15,19 +15,24 @@ import (
 const WALLPAPERS_PATH = "home/catalin/Pictures/wallpapers/"
 
 func main() {
-  if os.Args[1] == "change" {
+  if len(os.Args) < 2 {
     changeBackground()
-  } else if os.Args[1] == "next" {
-    nextBackground()
-  } else if os.Args[1] == "prev" {
-    prevBackground()
-  } else if os.Args[1] == "loop" {
-    newLoop(os.Args)
-  } else if os.Args[1] == "start" {
-    newTmux()
-  } else if os.Args[1] == "stop" {
-    exitTmux()
-  }
+  } else {
+    switch os.Args[1] {
+    case "next":
+      nextBackground()
+    case "prev":
+      prevBackground()
+    case "loop":
+      newLoop(os.Args)
+    case "start":
+      newTmux(os.Args)
+    case "stop":
+      exitTmux()
+    case "--help":
+      fmt.Println(helpText())
+    } 
+  } 
 }
 
 func changeBackground() {
@@ -92,7 +97,6 @@ func runCommand(commands []string) string {
   var out bytes.Buffer
   cmd.Stdout = &out
 
-  fmt.Println("Commands", commands)
   cmd.Run()
 
   returnString := ""
@@ -102,4 +106,22 @@ func runCommand(commands []string) string {
   }
 
   return returnString
+}
+
+func helpText() string {
+  result := `fundal is a simple tool to change or loop through wallpapers.
+The tools 'feh' and 'tmux' need to be installed for it to work
+
+It also expects the wallpepers to be in 'Pictures/wallpapers'
+
+Usage: fundal [options...]
+next            Switches to the next wallpaper
+prev            Switches to the previous wallpaper
+loop minutes    Loops over wallpapers with a specified interval in minutes
+start minutes   Starts new tmux session and runs the loop command with an interval in minutes
+stop minutes    Cancels any tmux session and loops
+
+Running only the fundal command will change the background to a random wallpaper 
+`
+  return result
 }
