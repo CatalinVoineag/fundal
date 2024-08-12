@@ -9,10 +9,9 @@ import (
   "strings"
 	"regexp"
   "math/rand"
-  //"reflect"
 )
 
-const WALLPAPERS_PATH = "home/catalin/Pictures/wallpapers/"
+var WALLPAPERS_PATH = fmt.Sprintf("%s/Pictures/wallpapers/", os.Getenv("HOME"))
 
 func main() {
   if len(os.Args) < 2 {
@@ -59,7 +58,7 @@ func prevBackground() {
 }
 
 func backgrounds() []string {
-  commands := []string { "ls", "home/catalin/Pictures/wallpapers/" }
+  commands := []string { "ls", fmt.Sprintf("%s/Pictures/wallpapers/", os.Getenv("HOME")) }
   out := runCommand(commands)
 
   if out != "" {
@@ -71,7 +70,7 @@ func backgrounds() []string {
 
 func currentBackground() string {
   re := regexp.MustCompile(`'([^"]*)'`)
-  commands := []string { "cat", "/home/catalin/.fehbg" }
+  commands := []string { "cat", fmt.Sprintf("%s/Pictures/wallpapers/", os.Getenv("HOME")) }
   catCommand:= runCommand(commands)
 
   fehContent := strings.Trim(re.FindString(catCommand), "'")
