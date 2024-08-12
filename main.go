@@ -70,7 +70,7 @@ func backgrounds() []string {
 
 func currentBackground() string {
   re := regexp.MustCompile(`'([^"]*)'`)
-  commands := []string { "cat", fmt.Sprintf("%s/Pictures/wallpapers/", os.Getenv("HOME")) }
+  commands := []string { "cat", fmt.Sprintf("%s/.fehbg", os.Getenv("HOME")) }
   catCommand:= runCommand(commands)
 
   fehContent := strings.Trim(re.FindString(catCommand), "'")
