@@ -1,3 +1,9 @@
+Install 
+
+```
+go install github.com/CatalinVoineag/fundal@latest
+```
+
 `fundal` is a simple tool to change or loop through wallpapers. The tools 'feh' and 'tmux' need to be installed for it to work
 
 It also expects the wallpapers to be in 'Pictures/wallpapers'
