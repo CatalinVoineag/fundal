@@ -25,9 +25,10 @@ func main() {
     case "loop":
       newLoop(os.Args)
     case "start":
-      newTmux(os.Args)
+      newProcess(os.Args)
     case "stop":
-      exitTmux()
+      //exitTmux()
+      // Stop process
     case "--help":
       fmt.Println(helpText())
     } 
