@@ -3,7 +3,6 @@ package main
 import (
   "strconv"
   "fmt"
-  "os"
 )
 
 func newTmux(args []string) {
@@ -55,7 +54,7 @@ func createSession(args []string) {
     "-d",
     "-s",
     "'fundal process'",
-    fmt.Sprintf("%s/play/fundal/bin/main", os.Getenv("HOME")),
+    "fundal",
     "loop",
     strconv.Itoa(minutes),
   }
